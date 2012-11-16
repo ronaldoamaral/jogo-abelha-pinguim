@@ -2,6 +2,8 @@ import copy
 import random
 import math
 
+from AGAbelha import mover
+
 class Individuo():
   """ """
   def __init__(self, nbits, cromossomo=None):
@@ -28,14 +30,17 @@ class Individuo():
     
   def evaluate(self, pinguim, abelha, diamantes):
     """ Fitness """
-    #pinguim.x, pinguim.y 
-    #abelha.x, abelha.y
-    #for diamante in diamantes:
-    #  pass
-    #import pdb;pdb.set_trace()
     direcao, olhar, passos =  self.valor()
-    fx = random.random()
-    #fx = x*math.sin((10*math.pi)*x) + 1.0
+    x,y = mover(pinguim.x,pinguim.y,direcao,passos)
+    #fx = math.sqrt(math.pow((abelha.x-x),2)+math.pow((abelha.y-y),2))
+    #fx = random.random()
+    distancias = []
+    for diamante in diamantes:
+      fx = math.sqrt((math.pow((diamante.x-x),2)+math.pow((diamante.y-y),2)))
+      distancias.append(fx)
+    
+    distancias.sort()
+    fx = distancias[0] * -1 
     self.aptidao = fx
     return fx
     

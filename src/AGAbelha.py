@@ -115,7 +115,7 @@ class Individuo():
     direcao = int(''.join(map(str,self.cromossomo[:3])),2)
     olhar = int(''.join(map(str,self.cromossomo[3:5])),2)
     if olhar == 0:
-      passos = 4
+      olhar = 4
     passos = int(''.join(map(str,self.cromossomo[5:7])),2)
     if passos == 0:
       passos = 4
@@ -123,15 +123,10 @@ class Individuo():
     
   def evaluate(self, abelha, pinguim):
     """ Fitness """
-    #pinguim.x, pinguim.y 
-    #abelha.x, abelha.y
-    #for diamante in diamantes:
-    #  pass
-    #import pdb;pdb.set_trace()
     direcao, olhar, passos =  self.valor()
     x,y = mover(abelha.x,abelha.y,direcao,passos)
     fx = (math.sqrt(math.pow((pinguim.x-x),2)+math.pow((pinguim.y-y),2)))*-1 # Multiplicado por -1 para modificar de max para mim
-    #fx = x*math.sin((10*math.pi)*x) + 1.0
+    #fx = random.random()
     self.aptidao = fx
     return fx
     
