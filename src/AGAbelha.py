@@ -2,6 +2,101 @@ import copy
 import random
 import math
 
+from jogo import LIM_X, LIM_Y
+
+def mover(x, y, direcao, passo):
+  """ 
+   Direcao:
+   0 = Direita
+   1 = Para Baixo /Direita
+   2 = Para Baixo
+   3 = Para Baixo / Esquerda
+   4 = Esquerda
+   5 = Para Cima / Esquerda
+   6 = Para Cima
+   7 = Para Cima / Direita
+   
+   Passo = Quantidade de Casas que ira se mover. 
+  
+  """
+  if direcao == 0:# Direita
+    for i in range(passo):
+      if (x + 1) in range(LIM_X):
+        x = x + 1
+      else:
+        break
+          
+  elif direcao == 1: # Para Baixo / Direita
+    for i in range(passo):
+      if (x + 1) in range(LIM_X):
+        x = x + 1
+      else:
+        break
+    for i in range(passo):
+      if (y + 1) in range(LIM_Y):
+        y = y + 1
+      else:
+        break
+      
+  elif direcao == 2: # Para Baixo
+    for i in range(passo):
+      if (y + 1) in range(LIM_X):
+        y = y + 1
+      else:
+        break
+      
+  elif direcao == 3: # Para Baixo / Esquerda
+    for i in range(passo):
+      if (x - 1) in range(LIM_X):
+        x = x - 1
+      else:
+        break
+    for i in range(passo):
+      if (y + 1) in range(LIM_Y):
+        y = y + 1
+      else:
+        break
+    
+  elif direcao == 4:# Esquerda 
+    for i in range(passo):
+      if (x - 1) in range(LIM_X):
+        x = x - 1
+      else:
+        break
+        
+  elif direcao == 5:# Para Cima / Esquerda
+    for i in range(passo):
+      if (x - 1) in range(LIM_X):
+        x = x - 1
+      else:
+        break
+    for i in range(passo):
+      if (y - 1) in range(LIM_Y):
+          y = y - 1
+      else:
+        break
+     
+  elif direcao == 6:# Para Cima
+    for i in range(passo):
+      if (y - 1) in range(LIM_X):
+        y = y - 1
+      else:
+        break
+          
+  elif direcao == 7:# Para Cima / Direita
+    for i in range(passo):
+      if (x + 1) in range(LIM_X):
+        x = x + 1
+      else:
+        break
+    for i in range(passo):
+      if (y - 1) in range(LIM_Y):
+          y = y - 1
+      else:
+        break
+  return x, y
+
+
 class Individuo():
   """ """
   def __init__(self, nbits, cromossomo=None):
@@ -34,7 +129,8 @@ class Individuo():
     #  pass
     #import pdb;pdb.set_trace()
     direcao, olhar, passos =  self.valor()
-    fx = random.random()
+    x,y = mover(abelha.x,abelha.y,direcao,passos)
+    fx = (math.sqrt(math.pow((pinguim.x-x),2)+math.pow((pinguim.y-y),2)))*-1 # Multiplicado por -1 para modificar de max para mim
     #fx = x*math.sin((10*math.pi)*x) + 1.0
     self.aptidao = fx
     return fx
@@ -145,7 +241,7 @@ class AGAbelha():
     return self.melhor_individuo.valor()
 
   def _goal(self):
-    return self.geracao > self.maxgeracao
+    return (self.geracao > self.maxgeracao) or (self.melhor_individuo.aptidao == 0)
 
   def step(self):
     self.pop.sort()
