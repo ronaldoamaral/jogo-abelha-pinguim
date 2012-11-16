@@ -110,7 +110,7 @@ class Jogo():
         self.screen.blit(self.abelha.imagem, (self.abelha.x*TILE, self.abelha.y*TILE)) # Movimentando a Abelha
         
         if len(self.diamantes) == 0:
-          self.vencedor == True
+          self.vencedor = True
           print "O Pinguim Venceu"
 
       else: 
