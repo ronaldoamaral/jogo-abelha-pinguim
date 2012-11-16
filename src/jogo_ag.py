@@ -22,10 +22,9 @@ class Abelha():
     self.imagem = pygame.image.load(abelha_png)
 
     
-  def movimento(self):
+  def movimento(self, pinguim):
     #direcao = random.randint(0,7)
     #passo = random.randint(0,4)
-    pinguim = None
     ag = AGAbelha(10, 50, 0.90, 0.01, self, pinguim)
     direcao, olhar, passo = ag.run()
     return direcao, passo
@@ -65,12 +64,9 @@ class Pinguim():
     return self.imagens[i]  
 
     
-  def movimento(self):
-    abelha = None
-    diamantes = None
+  def movimento(self, abelha, diamantes):
     ag = AGPinguim(10, 50, 0.90, 0.01, self, abelha, diamantes)
     direcao, olhar, passo = ag.run()
-    #import pdb; pdb.set_trace()
     return direcao, passo
     
 
@@ -83,9 +79,10 @@ class Jogo():
     pygame.init()
     pygame.display.set_caption("Jogo da Abelha e o Pinguim")
     self.screen = pygame.display.set_mode((640,640))
+    self.diamantes = []
     for i in range(5):
       obj = Diamante()
-      DIAMANTES.append(obj)
+      self.diamantes.append(obj)
     
     
     
@@ -100,21 +97,32 @@ class Jogo():
       self.screen.fill((255, 255, 255))
       
       if cont % 2 == 0:
-        self.movimentar(self.pinguim, self.abelha)
-        for diamante in DIAMANTES:
+        self.movimentar_pinguim()
+        
+        for diamante in self.diamantes:
+          if self.pinguim.x == diamante.x and self.pinguim.y == diamante.y:
+            self.diamantes.remove(diamante)
+            
+        for diamante in self.diamantes:
           self.screen.blit(diamante.imagem, (diamante.x*TILE, diamante.y*TILE)) # Desenhando os diamantes         
         self.screen.blit(self.pinguim.imagem(), (self.pinguim.x*TILE, self.pinguim.y*TILE)) # Movimentando o Pinguim      
         self.screen.blit(self.abelha.imagem, (self.abelha.x*TILE, self.abelha.y*TILE)) # Movimentando a Abelha
+        
+        if len(self.diamantes) == 0:
+          self.vencedor == True
+          print "O Pinguim Venceu"
 
       else: 
-        self.movimentar(self.abelha, self.pinguim)
-        for diamante in DIAMANTES:
+        self.movimentar_abelha()
+        
+        for diamante in self.diamantes:
           self.screen.blit(diamante.imagem, (diamante.x*TILE, diamante.y*TILE)) # Desenhando os diamantes     
         self.screen.blit(self.pinguim.imagem(), (self.pinguim.x*TILE, self.pinguim.y*TILE)) # Movimentando o Pinguim      
         self.screen.blit(self.abelha.imagem, (self.abelha.x*TILE, self.abelha.y*TILE)) # Movimentando a Abelha
 
         if self.pinguim.x == self.abelha.x and self.pinguim.y == self.abelha.y:
           self.vencedor = True
+          print "A Abelha Venceu"
 
       print "====== Jogada " + str(cont) + "=============="     
       print "Pinguim X=" + str(self.pinguim.x) + " Y=" + str(self.pinguim.y)
@@ -123,12 +131,13 @@ class Jogo():
       cont = cont + 1
       pygame.display.flip() # Atualizacao da tela
      
-      
-        
-  def movimentar(self, obj1, obj2):
-    #import pdb;pdb.set_trace()
-    direcao, passo = obj1.movimento()
-    self.mover(obj1, obj2, direcao, passo)
+  def movimentar_pinguim(self):
+    direcao, passo = self.pinguim.movimento(self.abelha, self.diamantes)
+    self.mover(self.pinguim, self.abelha, direcao, passo)
+    
+  def movimentar_abelha(self):
+    direcao, passo = self.abelha.movimento(self.pinguim)
+    self.mover(self.abelha, self.pinguim, direcao, passo)
   
   def mover(self, obj1, obj2, direcao, passo=1):
     """ 
