@@ -25,7 +25,8 @@ class Abelha():
   def movimento(self, pinguim):
     #direcao = random.randint(0,7)
     #passo = random.randint(0,4)
-    ag = AGAbelha(10, 50, 0.90, 0.01, self, pinguim)
+    #ag = AGAbelha(10, 50, 0.90, 0.01, self, pinguim)
+    ag = AGAbelha(5, 10, 0.50, 0.01, self, pinguim)
     direcao, olhar, passo = ag.run()
     return direcao, passo
     

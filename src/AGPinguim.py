@@ -32,15 +32,21 @@ class Individuo():
     """ Fitness """
     direcao, olhar, passos =  self.valor()
     x,y = mover(pinguim.x,pinguim.y,direcao,passos)
-    #fx = math.sqrt(math.pow((abelha.x-x),2)+math.pow((abelha.y-y),2))
+    distancia_abelha = math.sqrt(math.pow((abelha.x-x),2)+math.pow((abelha.y-y),2))
     #fx = random.random()
     distancias = []
     for diamante in diamantes:
-      fx = math.sqrt((math.pow((diamante.x-x),2)+math.pow((diamante.y-y),2)))
-      distancias.append(fx)
+      distancia_diamante = math.sqrt((math.pow((diamante.x-x),2)+math.pow((diamante.y-y),2)))
+      try:
+        dist = distancia_diamante / distancia_abelha
+        distancias.append(dist)
+      except:
+        distancias.append(0)
+      #distancias.append(distancia_diamante)
     
     distancias.sort()
-    fx = distancias[0] * -1 
+    fx = distancias[0]
+    #fx = distancia_abelha
     self.aptidao = fx
     return fx
     
@@ -77,7 +83,8 @@ class Individuo():
 
   def __cmp__(self,other):
     """ Funcao de comparacao para ordenar a lista """
-    return cmp(other.aptidao,self.aptidao)
+    #return cmp(other.aptidao,self.aptidao)  #Maxmizar
+    return cmp(self.aptidao,other.aptidao) #Minimizar
     
 
 class AGPinguim():
@@ -124,6 +131,7 @@ class AGPinguim():
       
   def _roleta(self):
       compt = []
+      #import pdb; pdb.set_trace()
       total_score = sum([math.ceil(self.pop[i].aptidao) for i in xrange(len(self.pop))])
       for index in xrange(len(self.pop)):
           temp = [index] * int((math.ceil(self.pop[index].aptidao /total_score) * 100))

@@ -125,7 +125,8 @@ class Individuo():
     """ Fitness """
     direcao, olhar, passos =  self.valor()
     x,y = mover(abelha.x,abelha.y,direcao,passos)
-    fx = (math.sqrt(math.pow((pinguim.x-x),2)+math.pow((pinguim.y-y),2)))*-1 # Multiplicado por -1 para modificar de max para mim
+    #fx = (math.sqrt(math.pow((pinguim.x-x),2)+math.pow((pinguim.y-y),2)))*-1 # Multiplicado por -1 para modificar de max para mim
+    fx = math.sqrt(math.pow((pinguim.x-x),2)+math.pow((pinguim.y-y),2)) # Multiplicado por -1 para modificar de max para mim
     #fx = random.random()
     self.aptidao = fx
     return fx
@@ -163,7 +164,8 @@ class Individuo():
 
   def __cmp__(self,other):
     """ Funcao de comparacao para ordenar a lista """
-    return cmp(other.aptidao,self.aptidao)
+    #return cmp(other.aptidao,self.aptidao)
+    return cmp(self.aptidao,other.aptidao)
     
 
 class AGAbelha():
